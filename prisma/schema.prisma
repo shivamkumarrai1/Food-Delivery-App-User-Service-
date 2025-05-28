@@ -1,0 +1,29 @@
+// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  ratings   Rating[]
+}
+
+model Rating {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  orderId         Int
+  deliveryAgentId Int?
+  rating          Int       // 1 to 5
+  comment         String?
+  createdAt       DateTime  @default(now())
+
+  user            User      @relation(fields: [userId], references: [id])
+}
